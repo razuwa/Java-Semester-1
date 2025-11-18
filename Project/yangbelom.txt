@@ -1,0 +1,4 @@
+kalo input nama pake integer
+kalo input tanggal pake string
+MANU UTAMA -> kalo milih <1 dan >3
+KASIR -> kalo input jumlah beli pake string
