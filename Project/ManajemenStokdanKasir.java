@@ -46,8 +46,9 @@ public class ManajemenStokdanKasir {
             System.out.println("\n=== Menu Utama ===");
             System.out.println("1. Kasir");
             System.out.println("2. Kelola Stok Barang");
-            System.out.println("3. Selesai bekerja");
-            System.out.print("Pilih menu (1-3): ");
+            System.out.println("3. Riwayat Pembelian");
+            System.out.println("4. Selesai Bekerja");
+            System.out.print("Pilih menu (1-4): ");
             int pilihMenu = scanner.nextInt(); scanner.nextLine();
 
             switch (pilihMenu) {
@@ -137,10 +138,14 @@ public class ManajemenStokdanKasir {
                     System.out.println("\n=== Kelola Stok Barang ===");
                     break;
                 case 3:
+                    System.out.println("\n=== Riwayat Pembelian ===");
+                    break;                    
+                case 4:
                     System.out.println("Selesai bekerja.");
                     System.out.println("Total Pendapatan Hari Ini:" + pendapatanHarian);
                     bekerja = false;
                     break; 
+
             }
             
         } while (bekerja);
