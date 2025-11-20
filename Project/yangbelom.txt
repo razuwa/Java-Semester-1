@@ -1,4 +1,11 @@
+Logika yang belum ditambahkan:
 kalo input nama pake integer
 kalo input tanggal pake string
 MANU UTAMA -> kalo milih <1 dan >3
 KASIR -> kalo input jumlah beli pake string
+
+Kesulitan:
+terlalu banyak looping bikin bingung
+
+Yang perlu diperbaiki:
+konflik antara 0 untuk selesai belanja dan 0 untuk input kode barang

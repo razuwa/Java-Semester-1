@@ -14,7 +14,6 @@ public class ManajemenStokdanKasir {
         int tanggalHari, nomorPelanggan;
         double totalBelanja = 0.0, pendapatanHarian = 0.0;
         char konfirmasi;
-        char lanjut = 'y';
 
         
         //Login Kasir
@@ -25,13 +24,14 @@ public class ManajemenStokdanKasir {
             //Input tanggal
         while (true) {
             System.out.print("Masukkan Tanggal Hari Ini (1-31): ");
-                tanggalHari = scanner.nextInt();
+                tanggalHari = scanner.nextInt(); scanner.nextLine();
                 if (tanggalHari < 1 || tanggalHari > 31) {
                     System.out.println("Tanggal tidak valid. Silakan masukkan angka antara 1-31.");
-                    continue;
+                    //continue;
                 }
                 break;
         }
+        System.out.println("Tanggal hari ini: " + tanggalHari);
         System.out.println("Login Berhasil. Selamat Bekerja, " + namaKasir + "!");
 
         //Stok Awal Barang
@@ -66,9 +66,6 @@ public class ManajemenStokdanKasir {
                     while (true) {
                         System.out.print("Masukkan Kode Barang (atau '0' untuk selesai): ");
                         String kodeInput = scanner.nextLine();
-                        if (kodeInput.equals("0")) {
-                            break;
-                        }
                         
                         //Logika mencari barang dalam arraylist
                         int indeksDitemukan = -1;
@@ -111,11 +108,34 @@ public class ManajemenStokdanKasir {
 
                             //Kurangi stok total
                             jumlahStok.set(indeksDitemukan, stokBrg - jumlahBeli);
-                            System.out.println(namaBrg + " sebanyak " + jumlahBeli + " Berhasil ditambahkan");
+                            System.out.println("\n " + namaBrg + " sebanyak " + jumlahBeli + " Berhasil ditambahkan");
                         }
+                        
+                        //Setelah selesai belanja (checkout)
+                        if (kodeInput.equals("0")) {
+                            if (keranjangKode.isEmpty()) {
+                                System.out.println("Tidak ada barang yang dibeli.");
+                            } else {
+                                System.out.println("\n=== Struk Belanja ===");
+                                System.out.printf("%-10s %-20s %-10s %-15s %-10s%n", "Kode", "Nama Barang", "Jumlah", "Harga Satuan", "Subtotal");
+                                for (int i = 0; i < keranjangKode.size(); i++) {
+                                    System.out.printf("%-10s %-20s %-10d %-15.2f %-10.2f%n",
+                                            keranjangKode.get(i),
+                                            keranjangNama.get(i),
+                                            keranjangJumlah.get(i),
+                                            keranjangHargaSatuan.get(i),
+                                            keranjangSubtotal.get(i));
+                                    totalBelanja += keranjangSubtotal.get(i);
+                                }
+                                System.out.printf("Total Belanja: %.2f%n", totalBelanja);
+                                pendapatanHarian += totalBelanja;
+                                totalBelanja = 0.0; // Reset total belanja untuk transaksi berikutnya
+                            }
+                            break;
+                        }                       
                     }
-                    
                     break;
+
                 case 2:
                     System.out.println("\n=== Kelola Stok Barang ===");
                     break;
