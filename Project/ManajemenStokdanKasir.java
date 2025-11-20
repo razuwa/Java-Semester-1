@@ -13,7 +13,6 @@ public class ManajemenStokdanKasir {
         String namaKasir;
         int tanggalHari, nomorPelanggan;
         double totalBelanja = 0.0, pendapatanHarian = 0.0;
-        char konfirmasi;
 
         
         //Login Kasir
@@ -27,7 +26,7 @@ public class ManajemenStokdanKasir {
                 tanggalHari = scanner.nextInt(); scanner.nextLine();
                 if (tanggalHari < 1 || tanggalHari > 31) {
                     System.out.println("Tanggal tidak valid. Silakan masukkan angka antara 1-31.");
-                    //continue;
+                    continue;
                 }
                 break;
         }
@@ -77,7 +76,7 @@ public class ManajemenStokdanKasir {
                         }
                         //Kalo barang ga ketemu
                         if (indeksDitemukan == -1) {
-                            System.out.println("Kode barang tidak ditemukan");
+                            System.out.println("Kode barang tidak ditemukan.");
                             }
 
                             //Kalo barang ketemu
@@ -106,9 +105,7 @@ public class ManajemenStokdanKasir {
                             keranjangHargaSatuan.add(hargaBrg);
                             keranjangSubtotal.add(hargaBrg * jumlahBeli);
 
-                            //Kurangi stok total
-                            jumlahStok.set(indeksDitemukan, stokBrg - jumlahBeli);
-                            System.out.println("\n " + namaBrg + " sebanyak " + jumlahBeli + " Berhasil ditambahkan");
+                            System.out.println("\n" + namaBrg + " sebanyak " + jumlahBeli + " berhasil ditambahkan");
                         }
                         
                         //Setelah selesai belanja (checkout)
@@ -129,7 +126,7 @@ public class ManajemenStokdanKasir {
                                 }
                                 System.out.printf("Total Belanja: %.2f%n", totalBelanja);
                                 pendapatanHarian += totalBelanja;
-                                totalBelanja = 0.0; // Reset total belanja untuk transaksi berikutnya
+                                totalBelanja = 0.0; // Reset total belanja
                             }
                             break;
                         }                       
@@ -141,6 +138,7 @@ public class ManajemenStokdanKasir {
                     break;
                 case 3:
                     System.out.println("Selesai bekerja.");
+                    System.out.println("Total Pendapatan Hari Ini:" + pendapatanHarian);
                     bekerja = false;
                     break; 
             }
