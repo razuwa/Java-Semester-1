@@ -5,14 +5,26 @@ import java.util.ArrayList;
 
 public class ManajemenStokdanKasir {
     public static void main(String[] args) {
+        //Scanner
         Scanner scanner = new Scanner(System.in);
+        
+        //Array untuk menyimpan barang
         ArrayList<String> kodeBarang = new ArrayList<>();
         ArrayList<String> namaBarang = new ArrayList<>();
         ArrayList<Double> daftarHarga = new ArrayList<>();
         ArrayList<Double> jumlahStok = new ArrayList<>();
+        
+        //Array untuk menyimpan Riwayat Pembelian
+        ArrayList<String> riwayatNoNota = new ArrayList<>();
+        ArrayList<String> riwayatNamaPembeli = new ArrayList<>();
+        ArrayList<Double> riwayatTotalBelanja = new ArrayList<>();
+        ArrayList<Double> riwayatDetailStruk = new ArrayList<>();
+        
+        //Deklarasi Variabel
         String namaKasir;
-        int tanggalHari, nomorPelanggan;
+        int tanggalHari;
         double totalBelanja = 0.0, pendapatanHarian = 0.0;
+        int nomorPelanggan = 1;
 
         
         //Login Kasir
@@ -55,12 +67,33 @@ public class ManajemenStokdanKasir {
                 // KASIR
                 case 1:
                     System.out.println("\n=== Menu Kasir ===");
+
+                    //Input nama pembeli
+                    System.out.print("Masukkan nama pembeli: ");
+                    String namaPembeli = scanner.nextLine();
+
+                    //Nomor Nota
+                    String nomorNota = "Nota-" + nomorPelanggan;
+
                     //Buat arraylist baru untuk keranjang belanja
                     ArrayList<String> keranjangKode = new ArrayList<>();
                     ArrayList<String> keranjangNama = new ArrayList<>();
                     ArrayList<Integer> keranjangJumlah = new ArrayList<>();
                     ArrayList<Double> keranjangHargaSatuan = new ArrayList<>();
                     ArrayList<Double> keranjangSubtotal = new ArrayList<>();
+
+                    // 3. Menampilkan Daftar Barang agar kasir tidak bingung
+                    System.out.println("\n--- Daftar Barang Tersedia ---");
+                    System.out.printf("%-6s %-20s %-15s %-10s%n", "Kode", "Nama Barang", "Harga", "Stok");
+                    System.out.println("------------------------------------------------------");
+                    for(int i=0; i<kodeBarang.size(); i++){
+                        System.out.printf("%-6s %-20s Rp%-13.0f %-10.0f%n", 
+                            kodeBarang.get(i), 
+                            namaBarang.get(i), 
+                            daftarHarga.get(i), 
+                            jumlahStok.get(i));
+                    }
+                    System.out.println("------------------------------------------------------");
 
                     //Looping transaksi tiap satu barang
                     while (true) {
