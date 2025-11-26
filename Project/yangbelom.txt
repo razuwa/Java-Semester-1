@@ -9,3 +9,4 @@ terlalu banyak looping bikin bingung
 
 Yang perlu diperbaiki:
 konflik antara 0 untuk selesai belanja dan 0 untuk input kode barang
+Stok barang masih bisa minus??????

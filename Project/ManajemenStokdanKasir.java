@@ -82,21 +82,22 @@ public class ManajemenStokdanKasir {
                     ArrayList<Double> keranjangHargaSatuan = new ArrayList<>();
                     ArrayList<Double> keranjangSubtotal = new ArrayList<>();
 
-                    // 3. Menampilkan Daftar Barang agar kasir tidak bingung
-                    System.out.println("\n--- Daftar Barang Tersedia ---");
-                    System.out.printf("%-6s %-20s %-15s %-10s%n", "Kode", "Nama Barang", "Harga", "Stok");
-                    System.out.println("------------------------------------------------------");
-                    for(int i=0; i<kodeBarang.size(); i++){
-                        System.out.printf("%-6s %-20s Rp%-13.0f %-10.0f%n", 
-                            kodeBarang.get(i), 
-                            namaBarang.get(i), 
-                            daftarHarga.get(i), 
-                            jumlahStok.get(i));
-                    }
-                    System.out.println("------------------------------------------------------");
-
                     //Looping transaksi tiap satu barang
                     while (true) {
+                        //Menampilkan daftar barang setiap mau menginputkan kode barang
+                        System.out.println("\n--- Daftar Barang Tersedia ---");
+                        System.out.printf("%-6s %-20s %-15s %-10s%n", "Kode", "Nama Barang", "Harga", "Stok");
+                        System.out.println("------------------------------------------------------");
+                        for(int i=0; i<kodeBarang.size(); i++){
+                          System.out.printf("%-6s %-20s Rp%-13.0f %-10.0f%n", 
+                              kodeBarang.get(i), 
+                              namaBarang.get(i), 
+                              daftarHarga.get(i), 
+                              jumlahStok.get(i));
+                       }
+                    System.out.println("------------------------------------------------------");
+
+                        //Input kode barang 
                         System.out.print("Masukkan Kode Barang (atau '0' untuk selesai): ");
                         String kodeInput = scanner.nextLine();
                         
@@ -120,11 +121,19 @@ public class ManajemenStokdanKasir {
                             double hargaBrg = daftarHarga.get(indeksDitemukan);
                             double stokBrg = jumlahStok.get(indeksDitemukan);
 
+                            //Kalo stok habis
+                            if (stokBrg <= 0) {
+                                System.out.println("Stok barang ini habis!");
+                                continue;
+                            }
+
                             //Logika jumlah beli
                             int jumlahBeli = 0;
                             while(true){
                                 System.out.print("Masukkan jumlah beli: ");
                                 jumlahBeli = scanner.nextInt(); scanner.nextLine();
+
+                                //Kalo jumlah belinya 0
                                 if (jumlahBeli <= 0) {
                                     System.out.println("Jumlah beli tidak boleh 0 ");
                                 } else {
@@ -139,7 +148,11 @@ public class ManajemenStokdanKasir {
                             keranjangHargaSatuan.add(hargaBrg);
                             keranjangSubtotal.add(hargaBrg * jumlahBeli);
 
-                            System.out.println("\n" + namaBrg + " sebanyak " + jumlahBeli + " berhasil ditambahkan");
+                            //Kurangi stok total
+                            jumlahStok.set(indeksDitemukan, stokBrg - jumlahBeli);
+
+                            //konfirmasi barang setelah ditambahkan ke keranjang
+                            System.out.println("\n->" + namaBrg + " sebanyak " + jumlahBeli + " berhasil ditambahkan");
                         }
                         
                         //Setelah selesai belanja (checkout)
@@ -167,8 +180,20 @@ public class ManajemenStokdanKasir {
                     }
                     break;
 
+                // KELOLA STOK BARANG    
                 case 2:
                     System.out.println("\n=== Kelola Stok Barang ===");
+                    System.out.println("\n--- Daftar Barang Tersedia ---");
+                    System.out.printf("%-6s %-20s %-15s %-10s%n", "Kode", "Nama Barang", "Harga", "Stok");
+                    System.out.println("------------------------------------------------------");
+                    for(int i=0; i<kodeBarang.size(); i++){
+                      System.out.printf("%-6s %-20s Rp%-13.0f %-10.0f%n", 
+                          kodeBarang.get(i), 
+                          namaBarang.get(i), 
+                          daftarHarga.get(i), 
+                          jumlahStok.get(i));
+                    }
+                    System.out.println("------------------------------------------------------");                    
                     break;
                 case 3:
                     System.out.println("\n=== Riwayat Pembelian ===");
