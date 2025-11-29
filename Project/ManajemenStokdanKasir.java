@@ -18,7 +18,8 @@ public class ManajemenStokdanKasir {
         ArrayList<String> riwayatNoNota = new ArrayList<>();
         ArrayList<String> riwayatNamaPembeli = new ArrayList<>();
         ArrayList<Double> riwayatTotalBelanja = new ArrayList<>();
-        ArrayList<Double> riwayatDetailStruk = new ArrayList<>();
+        ArrayList<String> riwayatTanggal = new ArrayList<>();
+        ArrayList<String> riwayatStruk = new ArrayList<>(); // Untuk menyimpan detail struk sebagai string
 
         // Deklarasi Variabel
         String namaKasir;
@@ -150,7 +151,7 @@ public class ManajemenStokdanKasir {
 
                         // Kalo barang ketemu
                         else {
-                            // variabel ini dah pokoknya, ngambil dari arraylist based on indeksDitemukan
+                            // variabel ini dah pokoknya, ngambil dari arraylist based on indeks Ditemukan
                             String namaBrg = namaBarang.get(indeksDitemukan);
                             double hargaBrg = daftarHarga.get(indeksDitemukan);
                             double stokBrg = jumlahStok.get(indeksDitemukan);
@@ -195,33 +196,44 @@ public class ManajemenStokdanKasir {
                             if (keranjangKode.isEmpty()) {
                                 System.out.println("Tidak ada barang yang dibeli.");
                             } else {
-                                System.out.println("\n=== Struk Belanja ===");
-                                System.out.printf("%-6s %-20s %-8s %-15s %-15s%n", "Kode", "Nama Barang", "Jml",
-                                        "Harga", "Subtotal");
-                                System.out.println(
-                                        "---------------------------------------------------------------------");
+
+                                // Build struk sebagai string
+                                StringBuilder strukBuilder = new StringBuilder();
+                                strukBuilder.append("\n=== Struk Belanja ===\n");
+                                strukBuilder.append("Nomor Nota: ").append(nomorNota).append("\n");
+                                strukBuilder.append("Nama Pembeli: ").append(namaPembeli).append("\n");
+                                strukBuilder.append("Tanggal: ").append(tanggalHari).append("\n");
+                                strukBuilder.append(String.format("%-6s %-20s %-8s %-15s %-15s%n", "Kode", "Nama Barang", "Jml", "Harga", "Subtotal"));
+                                strukBuilder.append("---------------------------------------------------------------------\n");
                                 for (int i = 0; i < keranjangKode.size(); i++) {
-                                    System.out.printf("%-6s %-20s %-8d Rp%-13.0f Rp%-13.0f%n",
+                                    strukBuilder.append(String.format("%-6s %-20s %-8d Rp%-13.0f Rp%-13.0f%n",
                                             keranjangKode.get(i),
                                             keranjangNama.get(i),
                                             keranjangJumlah.get(i),
                                             keranjangHargaSatuan.get(i),
-                                            keranjangSubtotal.get(i));
-
+                                            keranjangSubtotal.get(i)));
                                     totalBelanja += keranjangSubtotal.get(i);
                                 }
-                                System.out.println(
-                                        "---------------------------------------------------------------------");
-
-                                // Total dan Diskon
-                                System.out.printf("Total Belanja : Rp%.0f%n", totalBelanja);
+                                strukBuilder.append("---------------------------------------------------------------------\n");
+                                strukBuilder.append(String.format("Total Belanja : Rp%.0f%n", totalBelanja));
                                 double jumlahDiskon = totalBelanja * diskon;
-                                System.out.printf("Diskon        : Rp%.0f%n", jumlahDiskon);
-                                System.out.printf("Total Bayar   : Rp%.0f%n", (totalBelanja - jumlahDiskon));
-                                System.out.println("=====================================");
+                                strukBuilder.append(String.format("Diskon        : Rp%.0f%n", jumlahDiskon));
+                                strukBuilder.append(String.format("Total Bayar   : Rp%.0f%n", (totalBelanja - jumlahDiskon)));
+                                strukBuilder.append("=====================================\n");
+
+                                // Cetak struk
+                                System.out.println(strukBuilder.toString());
+
+                                // Simpan ke riwayat
+                                riwayatNoNota.add(nomorNota);
+                                riwayatNamaPembeli.add(namaPembeli);
+                                riwayatTotalBelanja.add(totalBelanja - jumlahDiskon);
+                                riwayatTanggal.add(String.valueOf(tanggalHari));
+                                riwayatStruk.add(strukBuilder.toString());
 
                                 pendapatanHarian += (totalBelanja - jumlahDiskon);
                                 totalBelanja = 0.0; // Reset total belanja
+                                nomorPelanggan++; // Increment nomor pelanggan
                             }
                             break;
                         }
@@ -249,7 +261,7 @@ public class ManajemenStokdanKasir {
                     do {
                         System.out.println("\n=== Submenu Kelola Stok ===");
                         System.out.println("1. Tambahkan Barang Baru");
-                        System.out.println("2. Menambah stok barang");
+                        System.out.println("2. Menambah Stok Barang");
                         System.out.println("3. Kurangi Stok Barang");
                         System.out.println("4. Lihat Stok Barang");
                         System.out.println("5. Kembali ke Menu Utama");
@@ -446,7 +458,49 @@ public class ManajemenStokdanKasir {
                     } while (kelolaStok);
                     break;
                 case 3:
-                    System.out.println("\n=== Riwayat Pembelian ===");
+                    boolean lihatRiwayat = true;
+                    while (lihatRiwayat) {
+                        System.out.println("\n=== Riwayat Pembelian ===");
+                        if (riwayatNoNota.isEmpty()) {
+                            System.out.println("Belum ada riwayat transaksi.");
+                            lihatRiwayat = false;  // Keluar loop jika kosong
+                            break;
+                        } else {
+                            // Tampilkan tabel riwayat
+                            System.out.printf("%-20s %-20s %-20s%n", "Nomor Transaksi", "Nama Pembeli", "Tanggal");
+                            System.out.println("---------------------------------------------------------------------");
+                            for (int i = 0; i < riwayatNoNota.size(); i++) {
+                                System.out.printf("%-20s %-20s %-20s%n",
+                                        riwayatNoNota.get(i),
+                                        riwayatNamaPembeli.get(i),
+                                        riwayatTanggal.get(i));
+                            }
+                            System.out.println("---------------------------------------------------------------------");
+                            // Input nomor transaksi untuk melihat struk
+                            System.out.print("Masukkan Nomor Transaksi (atau '0' untuk kembali): ");
+                            String inputNota = scanner.nextLine();
+                            if (inputNota.equals("0")) {
+                                lihatRiwayat = false;
+                                break;
+                            } else {
+                                int indeksNota = -1;
+                                for (int i = 0; i < riwayatNoNota.size(); i++) {
+                                    if (riwayatNoNota.get(i).equals(inputNota)) {
+                                        indeksNota = i;
+                                        break;
+                                    }
+                                }
+                                if (indeksNota != -1) {
+                                    // Tampilkan struk jika ditemukan
+                                    System.out.println(riwayatStruk.get(indeksNota));
+                                    continue;  // Kembali ke awal loop (tampilkan tabel lagi)
+                                } else {
+                                    System.out.println("Nomor transaksi tidak ditemukan.");
+                                    continue;  // Kembali ke awal loop (tampilkan tabel lagi)
+                                }
+                            }
+                        }
+                    }
                     break;
                 case 4:
                     System.out.println("Selesai bekerja.");
@@ -458,8 +512,7 @@ public class ManajemenStokdanKasir {
                     System.out.println("\nPilihan tidak valid. Silakan pilih 1-4.");
 
             }
-
+        
         } while (bekerja);
-
     }
 }
