@@ -1,7 +1,7 @@
-package Project;
-
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class ManajemenStokdanKasir {
     public static void main(String[] args) {
@@ -228,7 +228,7 @@ public class ManajemenStokdanKasir {
                                 riwayatNoNota.add(nomorNota);
                                 riwayatNamaPembeli.add(namaPembeli);
                                 riwayatTotalBelanja.add(totalBelanja - jumlahDiskon);
-                                riwayatTanggal.add(String.valueOf(tanggalHari));
+                                riwayatTanggal.add(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
                                 riwayatStruk.add(strukBuilder.toString());
 
                                 pendapatanHarian += (totalBelanja - jumlahDiskon);
@@ -467,7 +467,7 @@ public class ManajemenStokdanKasir {
                             break;
                         } else {
                             // Tampilkan tabel riwayat
-                            System.out.printf("%-20s %-20s %-20s%n", "Nomor Transaksi", "Nama Pembeli", "Tanggal");
+                            System.out.printf("%-20s %-20s %-20s%n", "Nomor Transaksi", "Nama Pembeli", "Waktu");
                             System.out.println("---------------------------------------------------------------------");
                             for (int i = 0; i < riwayatNoNota.size(); i++) {
                                 System.out.printf("%-20s %-20s %-20s%n",
