@@ -28,28 +28,34 @@ public class ManajemenStokdanKasir {
     static int nomorPelanggan = 1;
 
     public static void main(String[] args) {
-        //proses login kasir
+        // proses login kasir
         System.out.println("=== Manajemen Stok dan Kasir ===");
         System.out.print("Masukkan Nama Kasir: ");
         namaKasir = scanner.nextLine();
 
+        // Input tanggal
         while (true) {
             System.out.print("Masukkan Tanggal Hari Ini (1-31): ");
-            tanggalHari = scanner.nextInt();
-            scanner.nextLine();
-            if (tanggalHari < 1 || tanggalHari > 31) {
-                System.out.println("Tanggal tidak valid. Silakan masukkan angka antara 1-31.");
-                continue;
+            String inputMentah = scanner.nextLine();
+            try {
+                tanggalHari = Integer.parseInt(inputMentah);
+                if (tanggalHari < 1 || tanggalHari > 31) {
+                    System.out.println("Tanggal tidak valid. Silakan masukkan angka antara 1-31.");
+                } else {
+                    break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Error: Masukkan angka yang valid.");
             }
-            break;
         }
+        
         System.out.println("Tanggal hari ini: " + tanggalHari);
         System.out.println("\nLogin Berhasil. Selamat Bekerja, " + namaKasir + "!");
 
         // isi stok awal
         isiStokAwal();
 
-        //MENU UTAMA
+        // MENU UTAMA
         boolean bekerja = true;
         do {
             System.out.println("\n=== Menu Utama ===");
@@ -57,9 +63,13 @@ public class ManajemenStokdanKasir {
             System.out.println("2. Kelola Stok Barang");
             System.out.println("3. Riwayat Pembelian");
             System.out.println("4. Selesai Bekerja");
+
+            int pilihMenu = 0;
             System.out.print("Pilih menu (1-4): ");
-            int pilihMenu = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                pilihMenu = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+            }
 
             switch (pilihMenu) {
                 case 1:
@@ -83,7 +93,7 @@ public class ManajemenStokdanKasir {
     }
 
     // method stok awal
-        public static void isiStokAwal() {
+    public static void isiStokAwal() {
         kodeBarang.add("001"); namaBarang.add("Beras"); daftarHarga.add(15000.0); jumlahStok.add(50.0);
         kodeBarang.add("002"); namaBarang.add("Gula"); daftarHarga.add(12000.0); jumlahStok.add(30.0);
         kodeBarang.add("003"); namaBarang.add("Minyak Goreng"); daftarHarga.add(14000.0); jumlahStok.add(20.0);
@@ -91,7 +101,7 @@ public class ManajemenStokdanKasir {
         kodeBarang.add("005"); namaBarang.add("Gas LPG"); daftarHarga.add(20000.0); jumlahStok.add(10.0);
     }
 
-    //METHOD CASE 1: MENU KASIR
+    // METHOD CASE 1: MENU KASIR
     public static void menuKasir() {
         System.out.println("\n=== Menu Kasir ===");
 
@@ -139,7 +149,7 @@ public class ManajemenStokdanKasir {
                 break;
             }
 
-            // cari barang
+            // cari barang menggunakan algoritma linear search
             int indeksDitemukan = -1;
             for (int i = 0; i < kodeBarang.size(); i++) {
                 if (kodeBarang.get(i).equals(kodeInput)) {
@@ -163,14 +173,19 @@ public class ManajemenStokdanKasir {
                 int jumlahBeli;
                 while (true) {
                     System.out.print("Masukkan jumlah beli: ");
-                    jumlahBeli = scanner.nextInt();
-                    scanner.nextLine();
-                    if (jumlahBeli <= 0) {
-                        System.out.println("Jumlah beli tidak boleh 0/negatif.");
-                    } else if (jumlahBeli > stokBrg) {
-                        System.out.println("Stok tidak cukup (Sisa: " + stokBrg + ")");
-                    } else {
-                        break;
+                    String strJml = scanner.nextLine();
+                    try {
+                        jumlahBeli = Integer.parseInt(strJml);
+                        
+                        if (jumlahBeli <= 0) {
+                            System.out.println("Jumlah beli tidak boleh 0/negatif.");
+                        } else if (jumlahBeli > stokBrg) {
+                            System.out.println("Stok tidak cukup (Sisa: " + stokBrg + ")");
+                        } else {
+                            break; // Input valid
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Error: Masukkan angka yang valid.");
                     }
                 }
 
@@ -183,7 +198,7 @@ public class ManajemenStokdanKasir {
 
                 // kurangi stok global
                 jumlahStok.set(indeksDitemukan, stokBrg - jumlahBeli);
-                System.out.println("\n->" + namaBrg + " sebanyak " + jumlahBeli + " berhasil ditambahkan");
+                System.out.println("\n-> " + namaBrg + " sebanyak " + jumlahBeli + " berhasil ditambahkan");
             }
         }
 
@@ -247,9 +262,13 @@ public class ManajemenStokdanKasir {
             System.out.println("5. Update Harga Barang");
             System.out.println("6. Cari Barang");
             System.out.println("7. Kembali ke Menu Utama");
+            
+            int pilihSubmenu = 0;
             System.out.print("Pilih submenu (1-7): ");
-            int pilihSubmenu = scanner.nextInt();
-            scanner.nextLine();
+            try {
+                pilihSubmenu = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+            }
 
             switch (pilihSubmenu) {
                 case 1: // Tambah Barang Baru
@@ -266,7 +285,7 @@ public class ManajemenStokdanKasir {
                             }
                         }
                         if (!kodeUnik)
-                            System.out.println("Kode sudah ada.");
+                            System.out.println("Kode sudah ada. Gunakan kode lain.");
                         else
                             break;
                     }
@@ -274,24 +293,29 @@ public class ManajemenStokdanKasir {
                     String namaBaru = scanner.nextLine();
 
                     double hargaBaru;
-                    while (true) {
+                    while(true) {
                         System.out.print("Masukkan Harga: ");
-                        hargaBaru = scanner.nextDouble();
-                        scanner.nextLine();
-                        if (hargaBaru > 0)
-                            break;
-                        System.out.println("Harga harus > 0");
+                        try {
+                            hargaBaru = Double.parseDouble(scanner.nextLine());
+                            if (hargaBaru > 0) break;
+                            else System.out.println("Harga harus lebih dari 0.");
+                        } catch (NumberFormatException e) {
+                            System.out.println("Error: Masukkan angka harga yang valid.");
+                        }
                     }
 
                     double stokBaru;
-                    while (true) {
+                    while(true) {
                         System.out.print("Masukkan Stok Awal: ");
-                        stokBaru = scanner.nextDouble();
-                        scanner.nextLine();
-                        if (stokBaru >= 0)
-                            break;
-                        System.out.println("Stok tidak boleh negatif.");
+                        try {
+                            stokBaru = Double.parseDouble(scanner.nextLine());
+                            if (stokBaru >= 0) break;
+                            else System.out.println("Stok tidak boleh negatif.");
+                        } catch (NumberFormatException e) {
+                             System.out.println("Error: Masukkan angka yang valid.");
+                        }
                     }
+                    
                     kodeBarang.add(kodeBaru);
                     namaBarang.add(namaBaru);
                     daftarHarga.add(hargaBaru);
@@ -305,14 +329,21 @@ public class ManajemenStokdanKasir {
                     int idxAdd = kodeBarang.indexOf(kodeAdd);
                     if (idxAdd != -1) {
                         System.out.println("Stok saat ini: " + jumlahStok.get(idxAdd));
-                        System.out.print("Jumlah penambahan: ");
-                        double jmlAdd = scanner.nextDouble();
-                        scanner.nextLine();
-                        if (jmlAdd > 0) {
-                            jumlahStok.set(idxAdd, jumlahStok.get(idxAdd) + jmlAdd);
-                            System.out.println("Stok berhasil ditambah.");
-                        } else
-                            System.out.println("Jumlah harus > 0");
+                        
+                        double jmlAdd;
+                        while(true) {
+                             System.out.print("Jumlah penambahan: ");
+                             try {
+                                 jmlAdd = Double.parseDouble(scanner.nextLine());
+                                 if (jmlAdd > 0) break;
+                                 else System.out.println("Jumlah harus > 0");
+                             } catch (NumberFormatException e) {
+                                 System.out.println("Error: Masukkan angka yang valid.");
+                             }
+                        }
+                        
+                        jumlahStok.set(idxAdd, jumlahStok.get(idxAdd) + jmlAdd);
+                        System.out.println("Stok berhasil ditambah.");
                     } else
                         System.out.println("Kode tidak ditemukan.");
                     break;
@@ -324,14 +355,21 @@ public class ManajemenStokdanKasir {
                     if (idxMin != -1) {
                         double curStok = jumlahStok.get(idxMin);
                         System.out.println("Stok saat ini: " + curStok);
-                        System.out.print("Jumlah pengurangan: ");
-                        double jmlMin = scanner.nextDouble();
-                        scanner.nextLine();
-                        if (jmlMin > 0 && jmlMin <= curStok) {
-                            jumlahStok.set(idxMin, curStok - jmlMin);
-                            System.out.println("Stok berhasil dikurangi.");
-                        } else
-                            System.out.println("Jumlah tidak valid.");
+                        
+                        double jmlMin;
+                        while(true) {
+                             System.out.print("Jumlah pengurangan: ");
+                             try {
+                                 jmlMin = Double.parseDouble(scanner.nextLine());
+                                 if (jmlMin > 0 && jmlMin <= curStok) break;
+                                 else System.out.println("Jumlah tidak valid.");
+                             } catch (NumberFormatException e) {
+                                 System.out.println("Error: Masukkan angka yang valid.");
+                             }
+                        }
+
+                        jumlahStok.set(idxMin, curStok - jmlMin);
+                        System.out.println("Stok berhasil dikurangi.");
                     } else
                         System.out.println("Kode tidak ditemukan.");
                     break;
@@ -351,14 +389,21 @@ public class ManajemenStokdanKasir {
                     int idxUpd = kodeBarang.indexOf(kodeUpd);
                     if (idxUpd != -1) {
                         System.out.println("Harga Lama: " + daftarHarga.get(idxUpd));
-                        System.out.print("Harga Baru: ");
-                        double hrgBaru = scanner.nextDouble();
-                        scanner.nextLine();
-                        if (hrgBaru > 0) {
-                            daftarHarga.set(idxUpd, hrgBaru);
-                            System.out.println("Harga berhasil diupdate.");
-                        } else
-                            System.out.println("Harga harus > 0");
+                        
+                        double hrgBaruUpd;
+                        while(true) {
+                            System.out.print("Harga Baru: ");
+                            try {
+                                hrgBaruUpd = Double.parseDouble(scanner.nextLine());
+                                if (hrgBaruUpd > 0) break;
+                                else System.out.println("Harga harus > 0");
+                            } catch (NumberFormatException e) {
+                                System.out.println("Error: Masukkan angka yang valid.");
+                            }
+                        }
+
+                        daftarHarga.set(idxUpd, hrgBaruUpd);
+                        System.out.println("Harga berhasil diupdate.");
                     } else
                         System.out.println("Barang tidak ditemukan.");
                     break;
@@ -384,12 +429,12 @@ public class ManajemenStokdanKasir {
                     submenuAktif = false;
                     break;
                 default:
-                    System.out.println("Pilihan tidak valid.");
+                    System.out.println("Pilihan tidak valid. Silakan pilih 1-7.");
             }
         } while (submenuAktif);
     }
 
-    //METHOD CASE 3: RIWAYAT PEMBELIAN
+    // METHOD CASE 3: RIWAYAT PEMBELIAN
     public static void lihatRiwayatPembelian() {
         boolean lihatRiwayat = true;
         while (lihatRiwayat) {
