@@ -99,6 +99,24 @@ public class ManajemenStokdanKasir {
         kodeBarang.add("003"); namaBarang.add("Minyak Goreng"); daftarHarga.add(14000.0); jumlahStok.add(20.0);
         kodeBarang.add("004"); namaBarang.add("Mi Instan"); daftarHarga.add(4000.0); jumlahStok.add(120.0);
         kodeBarang.add("005"); namaBarang.add("Gas LPG"); daftarHarga.add(20000.0); jumlahStok.add(10.0);
+        kodeBarang.add("006"); namaBarang.add("Tepung Terigu"); daftarHarga.add(10000.0); jumlahStok.add(60.0);
+        kodeBarang.add("007"); namaBarang.add("Kopi"); daftarHarga.add(8000.0); jumlahStok.add(50.0);
+        kodeBarang.add("008"); namaBarang.add("Telur"); daftarHarga.add(25000.0); jumlahStok.add(40.0);
+        kodeBarang.add("009"); namaBarang.add("Garam"); daftarHarga.add(5000.0); jumlahStok.add(30.0);
+        kodeBarang.add("010"); namaBarang.add("Kecap"); daftarHarga.add(7000.0); jumlahStok.add(90.0);
+    }
+
+    // METHOD HITUNG NILAI DISKON
+    public static double hitungNilaiDiskon(double totalBelanja, int tanggal) {
+        double persentase;
+        
+        if (tanggal % 2 == 1) {
+            persentase = 0.10;
+        } else {
+            persentase = 0.05;
+        }
+
+        return totalBelanja * persentase;
     }
 
     // METHOD CASE 1: MENU KASIR
@@ -109,14 +127,11 @@ public class ManajemenStokdanKasir {
         String namaPembeli = scanner.nextLine();
         String nomorNota = "Nota-" + nomorPelanggan;
 
-        // info diskon
-        double diskon = 0.0;
+        // info diskon ganjil genap
         if (tanggalHari % 2 == 1) {
-            System.out.println("INFO: Tanggal ganjil - Semua pembelian mendapat diskon 10%!");
-            diskon = 0.1;
+            System.out.println("INFO: Tanggal ganjil - Anda akan mendapat diskon 10%!");
         } else {
-            System.out.println("INFO: Tanggal genap - Semua pembelian mendapat diskon 5%!");
-            diskon = 0.05;
+            System.out.println("INFO: Tanggal genap - Anda akan mendapat diskon 5%!");
         }
 
         // list keranjang belanja
@@ -221,7 +236,9 @@ public class ManajemenStokdanKasir {
 
         strukBuilder.append("---------------------------------------------------------------------\n");
         strukBuilder.append(String.format("Total Belanja : Rp%.0f%n", totalBelanjaSesiIni));
-        double jumlahDiskon = totalBelanjaSesiIni * diskon;
+        
+        double jumlahDiskon = hitungNilaiDiskon(totalBelanjaSesiIni, tanggalHari);
+        
         strukBuilder.append(String.format("Diskon        : Rp%.0f%n", jumlahDiskon));
         strukBuilder.append(String.format("Total Bayar   : Rp%.0f%n", (totalBelanjaSesiIni - jumlahDiskon)));
         strukBuilder.append("=====================================\n");
